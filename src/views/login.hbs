@@ -1,0 +1,44 @@
+
+  <div class="login-page">
+    <div id="login-form" class="login page home-login-form">
+      <p class="error-message"> {{message}} </p>
+      <form action="/login" method="post">
+        <label class="form-block">
+         Username: <br />
+          <input type="text" name="username" size="25" />
+        </label><br />
+        <label class="form-block">
+        Password: <br />
+          <input type="password" name="password"  size="25" />
+        </label><br />
+        <button>Sign in</button><br />
+        <div> New User? <a  class="homepage-login-btn" id="homepage-register-btn" href="/register">Register </a></div> 
+      </form>
+    </div> 
+  </div>
+    
+  <div class="register-page">
+    <div id="register-form" class="login page home-register-form">
+      <p class="error-message"> {{message}} </p>
+      <form action="/register" method="post">
+        <label class="form-block">
+         Pick a username: <br />
+          <input type="text" name="username" size="25" />
+        </label><br />
+        <label class="form-block">
+        Choose a password: <br />
+          <input type="password" name="password"  size="25" />
+        </label><br />
+         <label class="form-block">
+        Choose a password: <br />
+          <input type="password" name="password"  size="25" />
+        </label><br />
+        <button>Sign up</button><br />
+        <div> Already registered? <a class="homepage-login-btn" id="homepage-login-btn" href="/login">Login</a></div> 
+      </form>
+    </div>  
+  </div>
+    
+
+ 
+</main>
