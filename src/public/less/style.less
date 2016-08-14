@@ -7,8 +7,8 @@
 
 @import 'modules/colors';     // Global color scheme
 @import 'modules/mixins';     // Mixins
-@import 'modules/grid';       // Baseline grid
-// @import 'modules/flex-grid';  // Flexbox grid
+// @import 'modules/grid';       // Baseline grid
+@import 'modules/flex-grid';  // Flexbox grid
 @import 'modules/type';       // Typography
 
  * {
@@ -48,6 +48,21 @@ ul {
   word-wrap: break-word;
 }
 
+.chatMenu {
+  width: 20%;
+  height: 100%;
+  border: 1px solid grey;
+  float: left;
+}
+
+.chatMessageArea {
+  float: left;
+  width: 80%;
+
+  height: 100%;
+  border: 1px solid grey;
+}
+
 /* Pages */
 
 .pages {
@@ -72,36 +87,36 @@ ul {
 .login.page .form {
   height: 100px;
   margin-top: -100px;
-  position: absolute;
+  // position: absolute;
 
   text-align: center;
   top: 50%;
   width: 100%;
 }
 
-.login.page .form .usernameInput {
-  background-color: transparent;
-  border: none;
-  border-bottom: 2px solid #fff;
-  outline: none;
-  padding-bottom: 15px;
-  text-align: center;
-  width: 400px;
-}
+// .login.page .form .usernameInput {
+//   background-color: transparent;
+//   border: none;
+//   border-bottom: 2px solid #fff;
+//   outline: none;
+//   padding-bottom: 15px;
+//   text-align: center;
+//   width: 400px;
+// }
 
-.login.page .title {
-  font-size: 200%;
-}
+// .login.page .title {
+//   font-size: 200%;
+// }
 
-.login.page .usernameInput {
-  font-size: 200%;
-  letter-spacing: 3px;
-}
+// .login.page .usernameInput {
+//   font-size: 200%;
+//   letter-spacing: 3px;
+// }
 
-.login.page .title, .login.page .usernameInput {
-  color: #fff;
-  font-weight: 100;
-}
+// .login.page .title, .login.page .usernameInput {
+//   color: #fff;
+//   font-weight: 100;
+// }
 
 /* Chat page */
 

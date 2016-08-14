@@ -1,17 +1,4 @@
-$('#homepage-login-btn').click(function(event) {
-  event.preventDefault();
-  console.log('login pressed')
-  $('.login-page').css('display','block');
-  $('.register-page').css('display','none');
-});
-
-$('#homepage-register-btn').click(function(event) {
-  event.preventDefault();
-  console.log('register pressed')
-  $('.register-page').css('display','block');
-  $('.login-page').css('display','none');
-});
-
+console.log('linked');
 
 $(function() {
   var FADE_TIME = 150; // ms
@@ -32,13 +19,15 @@ $(function() {
   var $chatPage = $('.chat.page'); // The chatroom page
 
   // Prompt for setting a username
-  // var username = 'volodea';
-  var connected = true;
+  var connected = false;
   var typing = false;
   var lastTypingTime;
   var $currentInput = $usernameInput.focus();
 
   var socket = io();
+
+  setUsername();
+
 
   function addParticipantsMessage (data) {
     var message = '';
@@ -52,18 +41,7 @@ $(function() {
 
   // Sets the client's username
   function setUsername () {
-    username = cleanInput($usernameInput.val().trim());
-
-    // If the username is valid
-    if (username) {
-      $loginPage.fadeOut();
-      $chatPage.show();
-      $loginPage.off('click');
-      $currentInput = $inputMessage.focus();
-
-      // Tell the server your username
       socket.emit('add user', username);
-    }
   }
 
   // Sends a chat message
@@ -185,14 +163,14 @@ $(function() {
   }
 
   // Gets the 'X is typing' messages of a user
-  function getTypingMessages (data) {
+  function getTypingMessages(data) {
     return $('.typing.message').filter(function (i) {
       return $(this).data('username') === data.username;
     });
   }
 
   // Gets the color of a username through our hash function
-  function getUsernameColor (username) {
+  function getUsernameColor(username) {
     // Compute hash code
     var hash = 7;
     for (var i = 0; i < username.length; i++) {
@@ -278,4 +256,25 @@ $(function() {
   socket.on('stop typing', function (data) {
     removeChatTyping(data);
   });
+
 });
+
+// Show login page before chat
+// On "Login" click, switch to register
+$('#homepage-login-btn').click(function(event) {
+  event.preventDefault();
+  console.log('login pressed')
+  $('.login-page').css('display','block');
+  $('.register-page').css('display','none');
+});
+
+// On "Register" click, switch to Login
+$('#homepage-register-btn').click(function(event) {
+  event.preventDefault();
+  console.log('register pressed')
+  $('.register-page').css('display','block');
+  $('.login-page').css('display','none');
+});
+
+
+

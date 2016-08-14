@@ -27,7 +27,7 @@ HomeController.route('/login')
           req.session.userId     = user._id;
           req.session.username   = req.body.username;
           // console.log("succesfull log in")
-          req.session.message = 'Chat app';
+          req.session.pageTitle = 'Chat app';
           res.redirect('/');
         } else {
           req.session.message = 'Wrong username or password';
@@ -53,7 +53,7 @@ HomeController.route('/register')
           } else {
             req.session.isLoggedIn  = true;
             req.session.userId      = user._id;
-            req.session.username   = req.body.username;
+            req.session.username    = req.body.username;
             res.redirect('/');
           }
         });
@@ -67,10 +67,10 @@ HomeController.route('/?')
   // GET /
   .get(function(req, res, next) {
     if (req.session.isLoggedIn) {
-      console.log('you are logged in');
-      res.render('home', {pageTitle: 'Log in to continue | Sign in', username: req.session.username});
+      // console.log('you are logged in');
+      res.render('home', {pageTitle: 'Chat app', username: req.session.username});
     } else {
-      console.log('you need to log in')
+      // console.log('you need to log in')
       res.render('login', {pageTitle: 'Log in to continue | Sign in', 
                            message:   req.session.message ? req.session.message : 'Enter username and password'
       });
