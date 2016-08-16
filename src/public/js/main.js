@@ -23,6 +23,7 @@ $(function() {
   var typing = false;
   var lastTypingTime;
   var $currentInput = $usernameInput.focus();
+  var $onlineChatMembers = $('#online-chat-members');
 
   var socket = io();
 
@@ -30,12 +31,11 @@ $(function() {
 
 
   function addParticipantsMessage (data) {
-    var message = '';
-    if (data.numUsers === 1) {
-      message += "there's 1 participant";
-    } else {
-      message += "there are " + data.numUsers + " participants";
-    }
+    var message = '', activeUsersList = '';
+    data.activeUsers.forEach(function(val) {
+      activeUsersList += "<li>" + val + "</li>";
+    })
+    $onlineChatMembers.html(activeUsersList);
     log(message);
   }
 

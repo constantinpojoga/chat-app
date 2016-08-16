@@ -43,8 +43,8 @@ app.use('/?', require('./controllers/home'));
 var numUsers = 0, 
     activeUsers = [];
 
-io.on('connection', function (socket) {
-  console.log('connection')
+io.on('connection', function(socket) {
+  console.log(socket.id)
   var addedUser = false;
   console.log('Users connected: ')
 
@@ -70,13 +70,16 @@ io.on('connection', function (socket) {
     console.log('active users: ' + activeUsers);
     addedUser = true;
     socket.emit('login', {
-      numUsers: numUsers
+      numUsers:    numUsers,
+      activeUsers: activeUsers
+
     });
     // echo globally (all clients) that a person has connected
     console.log(socket.username + ' joined the room')
     socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
+      username:    socket.username,
+      numUsers:    numUsers,
+      activeUsers: activeUsers
     });
   });
 
@@ -105,8 +108,9 @@ io.on('connection', function (socket) {
       console.log('remaining active users: ' + activeUsers);
       // echo globally that this client has left
       socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
+        username:    socket.username,
+        numUsers:    numUsers,
+        activeUsers: activeUsers
       });
     }
   });
