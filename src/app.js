@@ -7,7 +7,6 @@ var express     = require('express'),
     bodyParser  = require('body-parser'),
     session     = require('express-session');
 
-// server.listen(3000);
 // Configuration
 // -------------
 app.engine('hbs', exphbs({
@@ -35,6 +34,7 @@ app.use(session({
 
 app.use(express.static(__dirname + '/public')); // Serve static files
 app.use('/users/?', require('./controllers/users'));
+app.use('/users/?', require('./controllers/posts'));
 app.use('/?', require('./controllers/home'));
 
 
@@ -100,6 +100,7 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function () {
     if (addedUser) {
       --numUsers;
+      activeUsers.splice(activeUsers.indexOf(socket.username), 1);
       console.log(socket.username + ' disconected, remain ' + numUsers +' users')
       console.log('remaining active users: ' + activeUsers);
       // echo globally that this client has left

@@ -613,11 +613,9 @@ a:hover {
 }
 * {
   color: #402E10;
-}
-/* Fix user-agent */
-* {
   box-sizing: border-box;
 }
+/* Fix user-agent */
 html {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
@@ -631,22 +629,46 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: url('/img/main-bg.jpeg');
+  background-size: cover;
 }
 ul {
   list-style: none;
   word-wrap: break-word;
 }
 .chatMenu {
-  width: 20%;
+  padding: 30px;
+  width: 25%;
   height: 100%;
-  border: 1px solid grey;
+  border: 1px solid lightblue;
   float: left;
+  border-right: none;
+}
+.chatMenu h1 {
+  display: inline-block;
+  float: left;
+  color: lightblue;
+}
+.chatMenu .menuButton {
+  padding: 3px;
+  border: 1px solid lightblue;
+  display: block;
+  height: 30px;
+  width: 30px;
+  float: right;
+}
+.chatMenu .menuButton :hover {
+  padding: 5px;
+}
+.chatMenu h3 {
+  clear: both;
+  color: #555;
 }
 .chatMessageArea {
   float: left;
-  width: 80%;
+  width: 75%;
   height: 100%;
-  border: 1px solid grey;
+  border: 1px solid lightblue;
 }
 /* Pages */
 .pages {
@@ -658,29 +680,29 @@ ul {
 .page {
   height: 100%;
   position: absolute;
-  width: 100%;
+  width: 74.8%;
 }
 /* Login Page */
 .login.page {
   background-color: #000;
 }
-.login.page .form {
-  height: 100px;
-  margin-top: -100px;
-  text-align: center;
-  top: 50%;
-  width: 100%;
-}
 /* Chat page */
 .chat.page {
   display: block;
 }
+.chat.page .chat-members {
+  position: fixed;
+  right: 10%;
+  top: 20px;
+  z-index: 100;
+}
+.chat.page .chat-members ul li {
+  font-size: 18px;
+  padding-bottom: 10px;
+}
 /* Font */
 .messages {
   font-size: 150%;
-}
-.inputMessage {
-  font-size: 100%;
 }
 .log {
   color: gray;
@@ -710,7 +732,21 @@ ul {
 }
 /* Input */
 .inputMessage {
-  border: 10px solid #000;
+  font-size: 150%;
+  border: 10px solid lightblue;
+  bottom: 0;
+  height: 60px;
+  outline: none;
+  padding-left: 10px;
+  position: absolute;
+  right: 0;
+  width: 95%;
+  display: inline;
+  float: left;
+}
+.attach-button {
+  font-size: 150%;
+  border: 10px solid lightblue;
   bottom: 0;
   height: 60px;
   left: 0;
@@ -718,7 +754,10 @@ ul {
   padding-left: 10px;
   position: absolute;
   right: 0;
-  width: 100%;
+  width: 5%;
+  border-right: 0;
+  display: inline;
+  float: left;
 }
 .login-page {
   display: block;

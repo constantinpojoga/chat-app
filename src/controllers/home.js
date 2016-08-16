@@ -6,6 +6,7 @@ var express         = require('express'),
     HomeController  = express.Router(),
     bcrypt          = require('bcrypt'),
     User            = require(__dirname + '/../models/user');
+    Chatroom        = require(__dirname + '/../models/chatroom');
     // exphbs          = require('express-handlebars');
 
 HomeController.route('/login')

@@ -13,17 +13,15 @@
 
  * {
       color: #402E10;
+      box-sizing: border-box;
     }
 
 /* Fix user-agent */
 
-* {
-  box-sizing: border-box;
-}
-
 html {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
+
 }
 
 html, input {
@@ -41,6 +39,8 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: url('/img/main-bg.jpeg');
+  background-size: cover;
 }
 
 ul {
@@ -48,19 +48,42 @@ ul {
   word-wrap: break-word;
 }
 
+
 .chatMenu {
-  width: 20%;
+  padding: 30px;
+  width: 25%;
   height: 100%;
-  border: 1px solid grey;
+  border: 1px solid lightblue;
   float: left;
+  border-right: none;
+  h1 {
+    display: inline-block;
+    float: left;
+    color: lightblue;
+  }
+  .menuButton {
+    padding: 3px;
+    border: 1px solid lightblue;
+    display: block;
+    height: 30px;
+    width: 30px;
+    float: right;
+    :hover {
+      padding: 5px;
+    }
+  }
+
+  h3  {
+    clear: both;
+    color: #555;
+  }
 }
 
 .chatMessageArea {
   float: left;
-  width: 80%;
-
+  width: 75%;
   height: 100%;
-  border: 1px solid grey;
+  border: 1px solid lightblue;;
 }
 
 /* Pages */
@@ -70,12 +93,14 @@ ul {
   margin: 0;
   padding: 0;
   width: 100%;
+
 }
 
 .page {
   height: 100%;
   position: absolute;
-  width: 100%;
+  width: 74.8%;
+
 }
 
 /* Login Page */
@@ -84,54 +109,28 @@ ul {
   background-color: #000;
 }
 
-.login.page .form {
-  height: 100px;
-  margin-top: -100px;
-  // position: absolute;
-
-  text-align: center;
-  top: 50%;
-  width: 100%;
-}
-
-// .login.page .form .usernameInput {
-//   background-color: transparent;
-//   border: none;
-//   border-bottom: 2px solid #fff;
-//   outline: none;
-//   padding-bottom: 15px;
-//   text-align: center;
-//   width: 400px;
-// }
-
-// .login.page .title {
-//   font-size: 200%;
-// }
-
-// .login.page .usernameInput {
-//   font-size: 200%;
-//   letter-spacing: 3px;
-// }
-
-// .login.page .title, .login.page .usernameInput {
-//   color: #fff;
-//   font-weight: 100;
-// }
-
 /* Chat page */
 
 .chat.page {
   display: block;
+  .chat-members {
+    ul {
+      li {
+        font-size: 18px;
+        padding-bottom: 10px;
+      }
+    }
+    position: fixed;
+    right: 10%;
+    top: 20px;
+    z-index: 100;
+  }
 }
 
 /* Font */
 
 .messages {
   font-size: 150%;
-}
-
-.inputMessage {
-  font-size: 100%;
 }
 
 .log {
@@ -169,7 +168,24 @@ ul {
 /* Input */
 
 .inputMessage {
-  border: 10px solid #000;
+  font-size: 150%;
+  border: 10px solid lightblue;
+  bottom: 0;
+  height: 60px;
+
+  outline: none;
+  padding-left: 10px;
+  position: absolute;
+  right: 0;
+  width: 95%;
+  display: inline;
+  float: left;
+}
+
+.attach-button {
+  font-size: 150%;
+  border: 10px solid lightblue;
+  // background: #999;
   bottom: 0;
   height: 60px;
   left: 0;
@@ -177,7 +193,11 @@ ul {
   padding-left: 10px;
   position: absolute;
   right: 0;
-  width: 100%;
+  width: 5%;
+  border-right: 0;
+  display: inline;
+  float: left;
+  
 }
 
 .login-page {
@@ -187,3 +207,5 @@ ul {
 .register-page {
   display: none;
 }
+
+.form-wrapper {}
