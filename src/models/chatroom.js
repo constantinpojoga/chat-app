@@ -1,13 +1,13 @@
-
-// User Model
+// Chatroom Model
 // ----------
 
 var mongoose = require('mongoose');
 
-
 var ChatroomSchema = new mongoose.Schema({
-  author: Number,
-  posts:  Array
+  name:     String,
+  public:   Boolean,
+  users:    Array,
+  messages: Array
 }, {
   strict: false
 });

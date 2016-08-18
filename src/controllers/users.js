@@ -40,9 +40,8 @@ UserController.route('/:id')
 UserController.route('/?')
    .get(function(req, res, next) {
     User.find(function(err, users){
-      // console.log(users)
-      console.log(err)
       if (err) {
+        console.log(err)
         res.send('ERROR: ' + err);
       } else 
       res.json(users)

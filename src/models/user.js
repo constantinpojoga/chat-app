@@ -10,7 +10,7 @@ var UserSchema = new mongoose.Schema({
   username: String,
   password: String,
   img:      String,
-  chatrooms:    Array
+  private:  Array
 }, {
   strict: false
 });

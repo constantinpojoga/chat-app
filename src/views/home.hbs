@@ -1,29 +1,18 @@
 
-
-
-
-
   <div class="chatMenu">
     <h1 class="chatLogo">sChat</h1>
     <img class="menuButton" src="/img/nav-menu-icon.png">
 
-      <h3>Chatrooms:</h3>
-      <p>General</p>
-      <p>JavaScript</p>
-      <p>Mobile</p>
-      <h3>Private messages:</h3>
-      <p>User</p>
+      <h3>Chatrooms: <button>+</button></h3>
+      <ul id="channelList" class="channelList"> 
+      </ul>
+      <h3>Private: <button id="newPrivateChat">+</button></h3>
+      <p>User </p>
       <p>Volodea</p>
       <p>Paola</p>
-
-
-
-    
     </div>
 
-
     <div class="chatMessageArea">
-      
         <ul class="pages">
           <li class="chat page">
             <div class="chatArea">
@@ -37,17 +26,25 @@
             <div class="input-wrapper">
               <button class="attach-button" type="button">+</button>
               <input class="inputMessage" placeholder="Type here..."/>
-            </div>
-
-
-
-            
-            
+            </div>  
           </li>
        </ul>
     </div>
 
-    
+    {{!-- Hiden elements of the page! add New Private Chatroom--}}
+    <div class="addPrivateChat" id="addPrivateChatWrapper">
+      <div id="closeAddPrivateChatBtb">X</div>
+      <div>
+        <form>
+          <h3>Username:</h3>
+          <input type="text" name="user" placeholder="Username here" size="80" /><br />
+          <h3>Message:</h3>
+          <input type="text" name="message" placeholder="Message here" size="80" ><br />
+          <button id="addPrivateChatBtn" type="button">Submit</button>
+        </form>
+      </div>
+      
+    </div>
 
 
 

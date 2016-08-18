@@ -27,10 +27,12 @@ $(function() {
 
   var socket = io();
 
+  // var channels = ['Lobby', 'JavaScript', 'Node', 'WDI5'];
   setUsername();
+  
 
-
-  function addParticipantsMessage (data) {
+  function addParticipantsMessage(data) {
+    console.log(data.activeUsers)
     var message = '', activeUsersList = '';
     data.activeUsers.forEach(function(val) {
       activeUsersList += "<li>" + val + "</li>";
@@ -40,12 +42,12 @@ $(function() {
   }
 
   // Sets the client's username
-  function setUsername () {
+  function setUsername() {
       socket.emit('add user', username);
   }
 
   // Sends a chat message
-  function sendMessage () {
+  function sendMessage() {
     var message = $inputMessage.val();
     // Prevent markup from being injected into the message
     message = cleanInput(message);
@@ -62,13 +64,13 @@ $(function() {
   }
 
   // Log a message
-  function log (message, options) {
+  function log(message, options) {
     var $el = $('<li>').addClass('log').text(message);
     addMessageElement($el, options);
   }
 
   // Adds the visual chat message to the message list
-  function addChatMessage (data, options) {
+  function addChatMessage(data, options) {
     // Don't fade the message in if there is an 'X was typing'
     var $typingMessages = getTypingMessages(data);
     options = options || {};
@@ -76,13 +78,21 @@ $(function() {
       options.fade = false;
       $typingMessages.remove();
     }
-
-    var $usernameDiv = $('<span class="username"/>')
+    
+    var chatTime;
+    if (data.time) {
+       chatTime = data.time;
+    } else {
+      chatTime = new Date();
+      // chatTime = ;
+    }
+    console.log(chatTime, typeof chatTime);
+    var $usernameDiv = $('<span class="username" />')
       .text(data.username)
-      .css('color', getUsernameColor(data.username));
-    var $messageBodyDiv = $('<span class="messageBody">')
-      .text(data.message);
-
+      .css('color', getUsernameColor(data.username)).append(' <span class="livestamp" data-livestamp="' + chatTime + '"></span>');;
+    var $messageBodyDiv = $('<p class="messageBody">')
+      .text(data.message)
+   
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
       .data('username', data.username)
@@ -93,14 +103,14 @@ $(function() {
   }
 
   // Adds the visual chat typing message
-  function addChatTyping (data) {
+  function addChatTyping(data) {
     data.typing = true;
     data.message = 'is typing';
     addChatMessage(data);
   }
 
   // Removes the visual chat typing message
-  function removeChatTyping (data) {
+  function removeChatTyping(data) {
     getTypingMessages(data).fadeOut(function () {
       $(this).remove();
     });
@@ -111,9 +121,8 @@ $(function() {
   // options.fade - If the element should fade-in (default = true)
   // options.prepend - If the element should prepend
   //   all other messages (default = false)
-  function addMessageElement (el, options) {
+  function addMessageElement(el, options) {
     var $el = $(el);
-
     // Setup default options
     if (!options) {
       options = {};
@@ -124,7 +133,6 @@ $(function() {
     if (typeof options.prepend === 'undefined') {
       options.prepend = false;
     }
-
     // Apply options
     if (options.fade) {
       $el.hide().fadeIn(FADE_TIME);
@@ -138,12 +146,12 @@ $(function() {
   }
 
   // Prevents input from having injected markup
-  function cleanInput (input) {
+  function cleanInput(input) {
     return $('<div/>').text(input).text();
   }
 
   // Updates the typing event
-  function updateTyping () {
+  function updateTyping() {
     if (connected) {
       if (!typing) {
         typing = true;
@@ -180,9 +188,26 @@ $(function() {
     var index = Math.abs(hash % COLORS.length);
     return COLORS[index];
   }
+  
+  // Gets the channel messages for the active channel
+  function getChannelMessages(channel_id) {
+    $messages.html('');
+    var msgs = chatrooms[channel_id].messages;
+    msgs.forEach(function(msg, i) {
+      var $usernameDiv = $('<span class="username" />')
+          .text(msg.author)
+          .css('color', getUsernameColor(msg.author)).append(' <span class="livestamp" data-livestamp="' + msg.time + '"></span>');;
+      var $messageBodyDiv = $('<p class="messageBody">')
+          .text(msg.message)
+      var $messageDiv = $('<li class="message"/>')
+        .data('username', msg.author)
+        .append($usernameDiv, $messageBodyDiv);
+      // Append the created DIV to the DOM
+      addMessageElement($messageDiv);
+    })
+  }
 
   // Keyboard events
-
   $window.keydown(function (event) {
     // Auto-focus the current input when a key is typed
     if (!(event.ctrlKey || event.metaKey || event.altKey)) {
@@ -203,9 +228,9 @@ $(function() {
   $inputMessage.on('input', function() {
     updateTyping();
   });
+  
 
   // Click events
-
   // Focus input when clicking anywhere on login page
   $loginPage.click(function () {
     $currentInput.focus();
@@ -214,13 +239,14 @@ $(function() {
   // Focus input when clicking on the message input's border
   $inputMessage.click(function () {
     $inputMessage.focus();
-  });
+  }); 
+
 
   // Socket events
-
   // Whenever the server emits 'login', log the login message
   socket.on('login', function (data) {
     connected = true;
+    console.log('login ' + data);
     // Display the welcome message
     var message = "Welcome to sChat";
     log(message, {
@@ -229,19 +255,27 @@ $(function() {
     addParticipantsMessage(data);
   });
 
+  socket.on('refresh users', function(data) {
+    console.log('rereshing users: ' + data)
+    addParticipantsMessage (data);
+  });
+
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
+    console.log(data)
     addChatMessage(data);
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
+    console.log('user joined, data');
     log(data.username + ' joined');
     addParticipantsMessage(data);
   });
 
   // Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', function (data) {
+    console.log('user joined, data');
     log(data.username + ' left');
     addParticipantsMessage(data);
     removeChatTyping(data);
@@ -257,8 +291,38 @@ $(function() {
     removeChatTyping(data);
   });
 
+  // Listing all global channels 
+  // on click, emit 'change room' and change css style only for selected <li>
+
+
+  $.ajax({
+    url: '/chatrooms/public',
+    type : 'GET',
+    success: function(channels) {
+      console.log(channels);
+      // console.log(typeof channels);
+      chatrooms = channels;
+
+      channels.forEach(function(channel, i) {
+        $('#channelList').append('<li id="channel' + channel.name + '">' + channel.name + '</li>');  
+        $('#channel' + channel.name).click(function() {
+          $('#channelList li').css("font-weight", "normal");
+          $(this).css("font-weight", "bold");
+          socket.emit('change room', i);  
+          getChannelMessages(i); 
+          });
+      });
+      
+      $('#channelList li').first().css("font-weight", "bold");
+      getChannelMessages(0);
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
 });
 
+var chatrooms;
 // Show login page before chat
 // On "Login" click, switch to register
 $('#homepage-login-btn').click(function(event) {
@@ -275,6 +339,25 @@ $('#homepage-register-btn').click(function(event) {
   $('.register-page').css('display','block');
   $('.login-page').css('display','none');
 });
+
+// add new Private Chat 
+$('#newPrivateChat').click(function() {
+  $('.addPrivateChat').show();
+});
+
+$('#addPrivateChatBtn').click(function(event) {
+  event.preventDefault();
+  // console.log('send btn pressed, hide form for newPrivateChat');
+  $('.addPrivateChat').hide();
+})
+
+$('#closeAddPrivateChatBtb').click(function() {
+  // Close form without submitting
+  $('.addPrivateChat').hide();
+})
+
+  
+
 
 
 
