@@ -655,7 +655,6 @@ ul {
   border: 1px solid lightblue;
   display: block;
   height: 30px;
-  width: 30px;
   float: right;
 }
 .chatMenu .menuButton:hover {
@@ -764,24 +763,34 @@ ul {
   padding-left: 10px;
   position: absolute;
   right: 0;
-  width: 95%;
+  width: 90%;
   display: inline;
   float: left;
 }
 .attach-button {
   font-size: 150%;
   border: 10px solid lightblue;
+  background: url(/img/image-btn.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   bottom: 0;
   height: 60px;
   left: 0;
   outline: none;
   padding-left: 10px;
   position: absolute;
-  right: 0;
   width: 5%;
   border-right: 0;
   display: inline;
   float: left;
+}
+.attach-button:nth-child(2) {
+  background: url(/img/snippet.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  left: 5%;
 }
 .login-page {
   display: block;
@@ -830,4 +839,126 @@ ul {
 }
 .addPrivateChat div:nth-child(2) button {
   margin-top: 20px;
+}
+.authentication {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.85);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.authentication div {
+  position: fixed;
+  width: 30%;
+  top: 30%;
+  left: 35%;
+}
+.authentication form {
+  color: white;
+}
+.authentication form input {
+  margin-bottom: 10px;
+}
+.authentication .error-message {
+  font-weight: 14px;
+  color: #F12B24;
+}
+.authentication p {
+  color: #ddd;
+  font-size: 18px;
+}
+.authentication button {
+  color: #111;
+  margin-bottom: 10px;
+}
+.addImgMessage {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.85);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.addImgMessage div:first-child {
+  position: fixed;
+  right: 50px;
+  top: 50px;
+  color: #777;
+  font-size: 55px;
+  border-radius: 50%;
+  border: 1px solid #777;
+  width: 80px;
+  height: 80px;
+  padding-left: 22px;
+  padding-right: 0;
+}
+.addImgMessage div:first-child:hover {
+  color: #999;
+  background-color: #333;
+  border: 1px solid #999;
+}
+.addImgMessage div:nth-child(2) {
+  top: 50%;
+  position: fixed;
+  left: 25%;
+  margin: 0 auto;
+  width: 50%;
+  height: 20%;
+}
+.addImgMessage div:nth-child(2) input {
+  width: 88%;
+}
+.addImgMessage div:nth-child(2) h3 {
+  color: #eee;
+  text-align: left;
+}
+.addImgMessage div:nth-child(2) button {
+  width: 10%;
+  display: inline-block;
+}
+.addSnippetMessage {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.85);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.addSnippetMessage div:first-child {
+  position: fixed;
+  right: 50px;
+  top: 50px;
+  color: #777;
+  font-size: 55px;
+  border-radius: 50%;
+  border: 1px solid #777;
+  width: 80px;
+  height: 80px;
+  padding-left: 22px;
+  padding-right: 0;
+}
+.addSnippetMessage div:first-child:hover {
+  color: #999;
+  background-color: #333;
+  border: 1px solid #999;
+}
+.addSnippetMessage div:nth-child(2) {
+  top: 50px;
+  position: fixed;
+  left: 25%;
+  width: 50%;
+}
+.addSnippetMessage div:nth-child(2) textarea {
+  width: 100%;
+  height: 500px;
+}
+.addSnippetMessage div:nth-child(2) h3 {
+  color: #eee;
+  text-align: left;
+}
+.addSnippetMessage div:nth-child(2) button {
+  display: inline-block;
 }

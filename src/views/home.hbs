@@ -22,29 +22,56 @@
                 </ul>
               </div>
               <ul class="messages"></ul>
-            </div>
+            </div
             <div class="input-wrapper">
-              <button class="attach-button" type="button">+</button>
+              <button class="attach-button" id="addSnippetMessageShow" type="button">&nbsp;</button>
+              <button class="attach-button" id="addImgMessageShow" type="button">&nbsp;</button>
               <input class="inputMessage" placeholder="Type here..."/>
             </div>  
           </li>
        </ul>
     </div>
 
-    {{!-- Hiden elements of the page! add New Private Chatroom--}}
-    <div class="addPrivateChat" id="addPrivateChatWrapper">
-      <div id="closeAddPrivateChatBtb">X</div>
-      <div>
-        <form>
-          <h3>Username:</h3>
-          <input type="text" name="user" placeholder="Username here" size="80" /><br />
-          <h3>Message:</h3>
-          <input type="text" name="message" placeholder="Message here" size="80" ><br />
-          <button id="addPrivateChatBtn" type="button">Submit</button>
-        </form>
-      </div>
-      
+  {{!-- Hiden elements of the page! add New Private Chatroom--}}
+  {{!-- --------------------------------------------------- --}}
+  {{!-- add a new private chat form --}}
+  <div class="addPrivateChat" id="addPrivateChatWrapper">
+    <div id="closeAddPrivateChatBtb">X</div>
+    <div>
+      <form>
+        <h3>Username:</h3>
+        <input id="addPrivateChatUser" type="text" name="user" placeholder="Username here" size="80" /><br />
+        <h3>Message:</h3>
+        <input id="addPrivateChatMessage" type="text" name="message" placeholder="Message here" size="80" ><br />
+        <button id="addPrivateChatBtn" type="button">Submit</button>
+      </form>
     </div>
+  </div>
+
+  {{!-- --------------------------------------------------- --}}
+  {{!-- add image to chat form --}}
+  <div class="addImgMessage" id="addImgMessage">
+    <div id="closeAddImgMessageBtb">X</div>
+    <div>
+      <form>
+        <h3>Snippet: </h3>
+        <input id="addImgMessageUrl" type="text" name="url" placeholder="URL here" size="80" />
+        <button id="addImgMessageBtn" type="button">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  {{!-- add image to chat form --}}
+  <div class="addSnippetMessage" id="addSnippetMessage">
+    <div id="closeAddSnippetMessageBtb">X</div>
+    <div>
+      <form>
+        <h3>Image url: </h3>
+        <textarea autofocus id="addSnippetMessageContent" name="snippet" placeholder="Paste snippet here" ></textarea><br />
+        <button id="addSnippetMessageBtn" type="button">Submit</button>
+      </form>
+    </div>
+  </div>
 
 
 

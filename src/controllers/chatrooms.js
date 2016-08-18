@@ -23,13 +23,15 @@ ChatroomController.route('/public')
 // GET /chatrooms/private/:user_id
 // --------------------
 // Lists all private chatrooms for :user_id
-ChatroomController.route('/private/:user_id')
+ChatroomController.route('/private/:username')
 .get(function(req, res, next) {
   Chatroom.find({public: false}, function(err, chatrooms) {
     if (err) {
       console.log(err)
     } else {
-      res.json(chatrooms);
+      res.json(chatrooms.filter(function(chatroom) {
+        return chatroom.users.indexOf(req.params.username) !== -1;
+      }));
     }
   });
 });

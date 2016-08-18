@@ -39,10 +39,16 @@ app.use('/?', require('./controllers/home'));
 
 
 
-var numUsers    = 0, 
+var numUsers    = 0; 
 // Chatroom
 // rooms which are currently available in chat
-    chatrooms = [ {name: 'Lobby',
+ 
+
+
+// Setting IO connections
+io.on('connection', function(socket) {
+
+  var chatrooms = [ {name: 'Lobby',
                    activeUsers: []
                   },
                   {name: 'JavaScript',
@@ -57,8 +63,7 @@ var numUsers    = 0,
                 ];;
 
 
-// Setting IO connections
-io.on('connection', function(socket) {
+
   var addedUser = false;
   var currentRoom = 0;
   socket.join(chatrooms[currentRoom].name);
@@ -91,7 +96,8 @@ io.on('connection', function(socket) {
     console.log('user in new room: ' + chatrooms[currentRoom].activeUsers)
     console.log(chatrooms);
   });
-
+  
+  
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function(data) {
     console.log('new message: ' + data);

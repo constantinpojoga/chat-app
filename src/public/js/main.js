@@ -1,5 +1,8 @@
 console.log('linked');
 
+var chatrooms;
+ 
+
 $(function() {
   var FADE_TIME = 150; // ms
   var TYPING_TIMER_LENGTH = 400; // ms
@@ -24,8 +27,10 @@ $(function() {
   var lastTypingTime;
   var $currentInput = $usernameInput.focus();
   var $onlineChatMembers = $('#online-chat-members');
-
+ 
   var socket = io();
+
+  var activeChannel = 0;
 
   // var channels = ['Lobby', 'JavaScript', 'Node', 'WDI5'];
   setUsername();
@@ -57,6 +62,24 @@ $(function() {
       addChatMessage({
         username: username,
         message: message
+      });
+      // Store the message to database
+
+
+      $.ajax({
+        type: 'POST',
+        url: '/chatrooms/' + chatrooms[activeChannel]._id,
+        data: {
+          author: username,
+          message: message
+        },
+        success: function(data) {
+          console.log(data);
+          console.log('new message stored in DB')
+        },
+        error: function(err) {
+          console.log('err')
+        }
       });
       // tell server to execute 'new message' and send along one parameter
       socket.emit('new message', message);
@@ -293,8 +316,6 @@ $(function() {
 
   // Listing all global channels 
   // on click, emit 'change room' and change css style only for selected <li>
-
-
   $.ajax({
     url: '/chatrooms/public',
     type : 'GET',
@@ -309,6 +330,7 @@ $(function() {
           $('#channelList li').css("font-weight", "normal");
           $(this).css("font-weight", "bold");
           socket.emit('change room', i);  
+          activeChannel = i;
           getChannelMessages(i); 
           });
       });
@@ -322,10 +344,15 @@ $(function() {
   });
 });
 
-var chatrooms;
+// ----------------------------------------------------------------
+// ------------------- setting for the static page ------------------------
+
+
+
+
 // Show login page before chat
 // On "Login" click, switch to register
-$('#homepage-login-btn').click(function(event) {
+$('#homepageLoginBtn').click(function(event) {
   event.preventDefault();
   console.log('login pressed')
   $('.login-page').css('display','block');
@@ -333,9 +360,11 @@ $('#homepage-login-btn').click(function(event) {
 });
 
 // On "Register" click, switch to Login
-$('#homepage-register-btn').click(function(event) {
+$('#homepageRegisterBtn').click(function(event) {
   event.preventDefault();
   console.log('register pressed')
+  
+  
   $('.register-page').css('display','block');
   $('.login-page').css('display','none');
 });
@@ -347,16 +376,62 @@ $('#newPrivateChat').click(function() {
 
 $('#addPrivateChatBtn').click(function(event) {
   event.preventDefault();
-  // console.log('send btn pressed, hide form for newPrivateChat');
+  var $user = $('#addPrivateChatUser').val(),
+      $message = $('#addPrivateChatMessage').val(),
+      $time = new Date();
+  var objToSend = {
+    name: username + " " + $user,
+    public: false,
+    users: [username, $user],
+    messages: [{
+                author: username,
+                message: $message,
+                time: $time
+              }]
+  };
+  // console.log(objToSend);
+  $.ajax({
+    type: 'POST',
+    url: "/chatrooms",
+    dataType: "JSON",
+    data: objToSend,
+    success: function() {
+      console.log('new private chatroom created')
+    },
+    error: function(err) {
+      console.log('err')
+    }
+  });
+
+  // some function here to refresh the list of private rooms
+  // Send to other user msg to refresh chat list
+
+
+
+
   $('.addPrivateChat').hide();
 })
 
 $('#closeAddPrivateChatBtb').click(function() {
-  // Close form without submitting
   $('.addPrivateChat').hide();
 })
 
-  
+
+$('#addImgMessageShow').click(function() {
+  $('.addImgMessage').show();
+});
+
+$('#closeAddImgMessageBtb').click(function() {
+  $('.addImgMessage').hide();
+})
+
+$('#addSnippetMessageShow').click(function() {
+  $('.addSnippetMessage').show();
+});
+
+$('#closeAddSnippetMessageBtb').click(function() {
+  $('.addSnippetMessage').hide();
+});
 
 
 
