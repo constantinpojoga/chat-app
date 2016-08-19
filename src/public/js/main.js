@@ -15,33 +15,38 @@ $(function() {
   // Initialize variables
   var $window = $(window);
   var $usernameInput = $('.usernameInput'); // Input for username
-  var $messages = $('.messages'); // Messages area
-  var $inputMessage = $('.inputMessage'); // Input message input box
+  var $messages      = $('.messages'); // Messages area
+  var $inputMessage  = $('.inputMessage'); // Input message input box
+  var $inputImg      = $('#addImgMessageUrl');
+  var $inputSnippet  = $('#addSnippetMessageContent');
+ 
 
-  var $loginPage = $('.login.page'); // The login page
-  var $chatPage = $('.chat.page'); // The chatroom page
+  var $loginPage     = $('.login.page'); // The login page
+  var $chatPage      = $('.chat.page'); // The chatroom page
 
   // Prompt for setting a username
-  var connected = false;
-  var typing = false;
+  var connected      = false;
+  var typing         = false;
   var lastTypingTime;
-  var $currentInput = $usernameInput.focus();
+  var $currentInput  = $usernameInput.focus();
   var $onlineChatMembers = $('#online-chat-members');
  
   var socket = io();
 
-  var activeChannel = 0;
-
+  var activeChannel  = 0;
+  var readyToType    = true;
+  
   // var channels = ['Lobby', 'JavaScript', 'Node', 'WDI5'];
   setUsername();
   
-
+  // Displays all online user for active channel
+  // now disabled!!!
   function addParticipantsMessage(data) {
     console.log(data.activeUsers)
     var message = '', activeUsersList = '';
-    data.activeUsers.forEach(function(val) {
-      activeUsersList += "<li>" + val + "</li>";
-    })
+    // data.activeUsers.forEach(function(val) {
+    //   activeUsersList += "<li>" + val + "</li>";
+    // });
     $onlineChatMembers.html(activeUsersList);
     log(message);
   }
@@ -51,30 +56,44 @@ $(function() {
       socket.emit('add user', username);
   }
 
-  // Sends a chat message
-  function sendMessage() {
-    var message = $inputMessage.val();
-    // Prevent markup from being injected into the message
-    message = cleanInput(message);
+  // Sends the chat message to socket and to addChatMessage(objToSend)
+  function sendMessage(type) {
+    var objToSend = {},
+        message   = '';
+    if (type === "img" || type ==="image") {
+      message = $inputImg.val();
+      $inputImg.val('');
+    } else {
+      if (type === "snippet") {
+        message = $inputSnippet.val();  
+        $inputSnippet.val('');
+      } else {
+          message = $inputMessage.val();
+          // Prevent markup from being injected into the message
+          message = cleanInput(message);
+          $inputMessage.val('');
+      }
+    }
+
+    objToSend  = {
+              username: username,
+              message:  message,
+              type:     type || 'text',
+            };
+  
     // if there is a non-empty message and a socket connection
     if (message && connected) {
-      $inputMessage.val('');
-      addChatMessage({
-        username: username,
-        message: message
-      });
-      // Store the message to database
-
-
+      addChatMessage(objToSend);
+      // Store the message to database, Ajax to /chatrooms/, type "POST"
       $.ajax({
         type: 'POST',
         url: '/chatrooms/' + chatrooms[activeChannel]._id,
         data: {
-          author: username,
-          message: message
+          author:  username,
+          message: message,
+          type:    type
         },
         success: function(data) {
-          console.log(data);
           console.log('new message stored in DB')
         },
         error: function(err) {
@@ -82,7 +101,7 @@ $(function() {
         }
       });
       // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+      socket.emit('new message', objToSend);
     }
   }
 
@@ -92,7 +111,7 @@ $(function() {
     addMessageElement($el, options);
   }
 
-  // Adds the visual chat message to the message list
+  // Append the message, snippet or image to the chat
   function addChatMessage(data, options) {
     // Don't fade the message in if there is an 'X was typing'
     var $typingMessages = getTypingMessages(data);
@@ -107,32 +126,81 @@ $(function() {
        chatTime = data.time;
     } else {
       chatTime = new Date();
-      // chatTime = ;
+      chatTimeISO = chatTime.toISOString();
     }
-    console.log(chatTime, typeof chatTime);
-    var $usernameDiv = $('<span class="username" />')
-      .text(data.username)
-      .css('color', getUsernameColor(data.username)).append(' <span class="livestamp" data-livestamp="' + chatTime + '"></span>');;
-    var $messageBodyDiv = $('<p class="messageBody">')
-      .text(data.message)
-   
+  
     var typingClass = data.typing ? 'typing' : '';
-    var $messageDiv = $('<li class="message"/>')
-      .data('username', data.username)
-      .addClass(typingClass)
-      .append($usernameDiv, $messageBodyDiv);
 
-    addMessageElement($messageDiv, options);
+    var $usernameDiv = $('<span class="username" />')
+        .text(username)
+        .css('color', getUsernameColor(username)).append(' <span class="livestamp" data-livestamp="' + chatTimeISO + '"></span>');
+    var $messageBodyDiv;
+
+    if (data.type === 'img') {
+      var timeId = new Date();
+      imageId = 'img' + timeId.getTime().toString();
+
+      $messageBodyDiv = '<li><img class="imageMessageBody" id="' + imageId + '" src="' + data.message + '"></li>'
+      
+       var $messageDiv = $('<li class="message"/>')
+        .data('username', username)
+        .append($usernameDiv, $messageBodyDiv);
+      // Append the created DIV to the DOM
+      addMessageElement($messageDiv);
+
+      $('#' + imageId).click(function() {
+        console.log('show img');
+        $('.imagePreviewDiv div:first-child')
+          .css('background-image', 'url(' + data.message + ')')
+          .css('background-repeat', 'no-repeat')
+          .css('background-size', 'auto content');
+        $('.imagePreviewDiv').show();
+      });
+
+    } else if (data.type === 'snippet') {
+
+      // Building snippet <div>
+      var $messageBodyDiv = '<li><ol class="snippetMessageBody">';
+      var snippet = data.message.split('\n').map(function(val) { 
+        return val.replace(/\s/g, '&nbsp;')
+                  .replace(/\</g, '&lt;')
+                  .replace(/\>/g, '&gt;')
+                  .replace(/\//g, '&bsol;')
+                  .replace(/\n/g, '');
+      });
+
+      snippet.forEach(function(val) {
+        $messageBodyDiv += '<li><span>' + val + '<span></li>';
+      });
+      $messageBodyDiv += '</ol></li></br>';
+
+       var $messageDiv = $('<li class="message"/>')
+        .data('username', username)
+        .append($usernameDiv, $messageBodyDiv);
+      // Append the created DIV to the DOM
+    addMessageElement($messageDiv);
+    } else {
+      // Building message <li>
+      $messageBodyDiv = $('<p class="messageBody">')
+        .text(data.message);
+
+       var $messageDiv = $('<li class="message"/>')
+        .data('username', username)
+        .addClass(typingClass)
+        .append($usernameDiv, $messageBodyDiv);
+      // Append the created DIV to the DOM
+      addMessageElement($messageDiv);
+    }
   }
 
-  // Adds the visual chat typing message
+  // Adds the visual chat "typing" message
   function addChatTyping(data) {
     data.typing = true;
     data.message = 'is typing';
     addChatMessage(data);
   }
 
-  // Removes the visual chat typing message
+  // Removes the visual chat "typing" message
   function removeChatTyping(data) {
     getTypingMessages(data).fadeOut(function () {
       $(this).remove();
@@ -217,16 +285,71 @@ $(function() {
     $messages.html('');
     var msgs = chatrooms[channel_id].messages;
     msgs.forEach(function(msg, i) {
+
       var $usernameDiv = $('<span class="username" />')
           .text(msg.author)
-          .css('color', getUsernameColor(msg.author)).append(' <span class="livestamp" data-livestamp="' + msg.time + '"></span>');;
-      var $messageBodyDiv = $('<p class="messageBody">')
-          .text(msg.message)
-      var $messageDiv = $('<li class="message"/>')
-        .data('username', msg.author)
-        .append($usernameDiv, $messageBodyDiv);
-      // Append the created DIV to the DOM
+          .css('color', getUsernameColor(msg.author)).append(' <span class="livestamp" data-livestamp="' + msg.time + '"></span>');
+      var $messageBodyDiv;
+
+      if (msg.type === 'img') {
+        var timeId = new Date();
+        imageId = 'img' + timeId.getTime().toString();
+
+        $messageBodyDiv = '<li><img class="imageMessageBody" id="' + imageId + '" src="' + msg.message + '"></li>'
+        
+         var $messageDiv = $('<li class="message"/>')
+          .data('username', msg.author)
+          .append($usernameDiv, $messageBodyDiv);
+        // Append the created DIV to the DOM
+        addMessageElement($messageDiv);
+
+        $('#' + imageId).click(function() {
+          console.log('show img');
+          $('.imagePreviewDiv div:first-child')
+            .css('background-image', 'url(' + msg.message + ')')
+            .css('background-repeat', 'no-repeat')
+            .css('background-size', 'cover');
+          $('.imagePreviewDiv').show();
+        });
+
+      } else if (msg.type === 'snippet') {
+
+        // Building snippet <div>
+        var $messageBodyDiv = '<li><ol class="snippetMessageBody">';
+        var snippet = msg.message.split('\n').map(function(val) { 
+          return val.replace(/\s/g, '&nbsp;')
+                    .replace(/\</g, '&lt;')
+                    .replace(/\>/g, '&gt;')
+                    .replace(/\//g, '&bsol;')
+                    .replace(/\n/g, '');
+        });
+        console.log( snippet);
+
+        snippet.forEach(function(val) {
+          $messageBodyDiv += '<li><span>' + val + '<span></li>';
+        });
+        $messageBodyDiv += '</ol></li><br />';
+        console.log($messageBodyDiv);
+
+
+
+         var $messageDiv = $('<li class="message"/>')
+          .data('username', msg.author)
+          .append($usernameDiv, $messageBodyDiv);
+        // Append the created DIV to the DOM
       addMessageElement($messageDiv);
+      } else {
+        // Building message <li>
+        $messageBodyDiv = $('<p class="messageBody">')
+          .text(msg.message);
+
+         var $messageDiv = $('<li class="message"/>')
+          .data('username', msg.author)
+          .append($usernameDiv, $messageBodyDiv);
+        // Append the created DIV to the DOM
+        addMessageElement($messageDiv);
+      }
+     
     })
   }
 
@@ -237,9 +360,9 @@ $(function() {
       $currentInput.focus();
     }
     // When the client hits ENTER on their keyboard
-    if (event.which === 13) {
+    if (event.which === 13 && readyToType) {
       if (username) {
-        sendMessage();
+        sendMessage("text");
         socket.emit('stop typing');
         typing = false;
       } else {
@@ -279,7 +402,7 @@ $(function() {
   });
 
   socket.on('refresh users', function(data) {
-    console.log('rereshing users: ' + data)
+    console.log('refeshing users: ' + data)
     addParticipantsMessage (data);
   });
 
@@ -342,97 +465,118 @@ $(function() {
       console.log(err);
     }
   });
-});
-
-// ----------------------------------------------------------------
-// ------------------- setting for the static page ------------------------
 
 
+  // ----------------------------------------------------------------
+  // ------------------- setting for the static page ------------------------
 
-
-// Show login page before chat
-// On "Login" click, switch to register
-$('#homepageLoginBtn').click(function(event) {
-  event.preventDefault();
-  console.log('login pressed')
-  $('.login-page').css('display','block');
-  $('.register-page').css('display','none');
-});
-
-// On "Register" click, switch to Login
-$('#homepageRegisterBtn').click(function(event) {
-  event.preventDefault();
-  console.log('register pressed')
-  
-  
-  $('.register-page').css('display','block');
-  $('.login-page').css('display','none');
-});
-
-// add new Private Chat 
-$('#newPrivateChat').click(function() {
-  $('.addPrivateChat').show();
-});
-
-$('#addPrivateChatBtn').click(function(event) {
-  event.preventDefault();
-  var $user = $('#addPrivateChatUser').val(),
-      $message = $('#addPrivateChatMessage').val(),
-      $time = new Date();
-  var objToSend = {
-    name: username + " " + $user,
-    public: false,
-    users: [username, $user],
-    messages: [{
-                author: username,
-                message: $message,
-                time: $time
-              }]
-  };
-  // console.log(objToSend);
-  $.ajax({
-    type: 'POST',
-    url: "/chatrooms",
-    dataType: "JSON",
-    data: objToSend,
-    success: function() {
-      console.log('new private chatroom created')
-    },
-    error: function(err) {
-      console.log('err')
-    }
+  // Show login page before chat
+  // On "Login link" click, switch to register
+  $('#homepageLoginBtn').click(function(event) {
+    event.preventDefault();
+    $('.login-page').css('display','block');
+    $('.register-page').css('display','none');
   });
 
-  // some function here to refresh the list of private rooms
-  // Send to other user msg to refresh chat list
+  // On "Register link" click, switch to Login
+  $('#homepageRegisterBtn').click(function(event) {
+    event.preventDefault();
+    console.log('register pressed')
+    
+    
+    $('.register-page').css('display','block');
+    $('.login-page').css('display','none');
+  });
+
+  // add new Private Chat 
+  $('#newPrivateChat').click(function() {
+    readyToType = false;
+    $('.addPrivateChat').show();
+  });
+
+  $('#addPrivateChatBtn').click(function(event) {
+    event.preventDefault();
+    var $user = $('#addPrivateChatUser').val(),
+        $message = $('#addPrivateChatMessage').val(),
+        $time = new Date();
+    var objToSend = {
+      name: username + " " + $user,
+      public: false,
+      users: [username, $user],
+      messages: [{
+                  author: username,
+                  message: $message,
+                  time: $time
+                }]
+    };
+    // console.log(objToSend);
+    $.ajax({
+      type: 'POST',
+      url: "/chatrooms",
+      dataType: "JSON",
+      data: objToSend,
+      success: function() {
+        console.log('new private chatroom created')
+      },
+      error: function(err) {
+        console.log('err')
+      }
+    });
+
+    // some function here to refresh the list of private rooms
+    // Send to other user msg to refresh chat list
+   
+    $('.addPrivateChat').hide();
+    readyToType = true;
+  })
+
+  $('#closeAddPrivateChatBtn').click(function() {
+    $('.addPrivateChat').hide();
+  })
+
+  // Add new image
+  $('#addImgMessageShow').click(function() {
+    readyToType = false;
+    $('.addImgMessage').show();
+  });
+
+  $('#closeAddImgMessageBtn').click(function() {
+    $('.addImgMessage').hide();
+    readyToType = true;
+  });
+
+  $('#addImgMessageBtn').click(function() {
+    console.log("IMG")
+    sendMessage('img');
+    $('.addImgMessage').hide();
+    readyToType = true;
+  });
+  
+  // Add new snippet
+  $('#addSnippetMessageShow').click(function() {
+    readyToType = false;
+    $('.addSnippetMessage').show();
+  });
+
+  $('#closeAddSnippetMessageBtn').click(function() {
+    $('.addSnippetMessage').hide();
+    readyToType = true;
+  });
+
+  $('#addSnippetMessageBtn').click(function() {
+    sendMessage('snippet');
+    console.log('snippet');
+    $('.addSnippetMessage').hide();
+    readyToType = true;
+  });
 
 
+  // Close the Image Preview by pressing X button
+  $('#closeImagePreview').click(function() {
+    $('.imagePreviewDiv').hide();
+  });
 
-
-  $('.addPrivateChat').hide();
-})
-
-$('#closeAddPrivateChatBtb').click(function() {
-  $('.addPrivateChat').hide();
-})
-
-
-$('#addImgMessageShow').click(function() {
-  $('.addImgMessage').show();
 });
-
-$('#closeAddImgMessageBtb').click(function() {
-  $('.addImgMessage').hide();
-})
-
-$('#addSnippetMessageShow').click(function() {
-  $('.addSnippetMessage').show();
-});
-
-$('#closeAddSnippetMessageBtb').click(function() {
-  $('.addSnippetMessage').hide();
-});
-
 
 
 

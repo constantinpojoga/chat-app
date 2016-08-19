@@ -36,7 +36,7 @@
   {{!-- --------------------------------------------------- --}}
   {{!-- add a new private chat form --}}
   <div class="addPrivateChat" id="addPrivateChatWrapper">
-    <div id="closeAddPrivateChatBtb">X</div>
+    <div id="closeAddPrivateChatBtn">X</div>
     <div>
       <form>
         <h3>Username:</h3>
@@ -51,7 +51,7 @@
   {{!-- --------------------------------------------------- --}}
   {{!-- add image to chat form --}}
   <div class="addImgMessage" id="addImgMessage">
-    <div id="closeAddImgMessageBtb">X</div>
+    <div id="closeAddImgMessageBtn">X</div>
     <div>
       <form>
         <h3>Snippet: </h3>
@@ -63,25 +63,28 @@
 
   {{!-- add image to chat form --}}
   <div class="addSnippetMessage" id="addSnippetMessage">
-    <div id="closeAddSnippetMessageBtb">X</div>
+    <div id="closeAddSnippetMessageBtn">X</div>
     <div>
       <form>
         <h3>Image url: </h3>
-        <textarea autofocus id="addSnippetMessageContent" name="snippet" placeholder="Paste snippet here" ></textarea><br />
+        <textarea autofocus  spellcheck="false" id="addSnippetMessageContent" name="snippet" placeholder="Paste snippet here" ></textarea><br />
         <button id="addSnippetMessageBtn" type="button">Submit</button>
       </form>
     </div>
   </div>
 
-
-
-    
-
+  {{!-- Hiden div for image preview --}}
+  <div class="imagePreviewDiv">
+    <div>&nbsp;</div>
+    <div id="closeImagePreview"><h1>X</h1></div>
+    <p>To close the Foto press "X" on upper-left corner </p>
+  </div>
 
 <script>
 var username = '{{username}}';
 </script> 
 <script src="/js/main.js"></script>
+
 
 
 

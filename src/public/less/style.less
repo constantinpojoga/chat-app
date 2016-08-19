@@ -9,6 +9,7 @@
 @import 'modules/mixins';     // Mixins
 // @import 'modules/grid';       // Baseline grid
 @import 'modules/flex-grid';  // Flexbox grid
+@import 'modules/mobile';     // Mixins
 @import 'modules/type';       // Typography
 
  * {
@@ -95,12 +96,14 @@ ul {
     font-size: 18px;
     padding-bottom: 10px;
     padding-left: 0;
+    cursor: pointer;
   }
   
 }
 
 .livestamp {
-  color:  grey;
+  color:  #ffe6cc;
+  margin-left: 20px;
   font-weight: normal;
   font-style: italic;
 }
@@ -225,6 +228,7 @@ ul {
   border-right: 0;
   display: inline;
   float: left;
+  
   &:nth-child(2) {
     background: url(/img/snippet.png);
     background-size: contain;
@@ -265,6 +269,7 @@ ul {
     height: 80px;
     padding-left: 22px;
     padding-right: 0;
+    cursor: pointer;
     &:hover {
       color: #999;
       background-color: #333;
@@ -299,7 +304,6 @@ ul {
   height: 100%;
   div {
     position: fixed;
-    // border: 1px solid red;
     width: 30%;
     top: 30%;
     left: 35%;
@@ -348,6 +352,7 @@ ul {
       color: #999;
       background-color: #333;
       border: 1px solid #999;
+      cursor: pointer;
     }
   }
   div:nth-child(2) {
@@ -392,6 +397,7 @@ ul {
     height: 80px;
     padding-left: 22px;
     padding-right: 0;
+    cursor: pointer;
     &:hover {
       color: #999;
       background-color: #333;
@@ -416,5 +422,77 @@ ul {
       
     }
   }
+}
+
+.imageMessageBody {
+  cursor: pointer;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 10px auto;
+}
+
+.snippetMessageBody {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 60px;
+  margin-right: 100px;
+  li {
+    color: #111;
+    font-family: Verdana;
+    margin-top: 5px;
+    span {
+      padding-left: 10px;
+      border-left: 1px solid grey;
+    
+    }
+  }
+  font-size: 16px;
+  margin: 10px auto;
+  background: #ccc;
+}
+
+.imagePreviewDiv {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.85);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  div:nth-child(2) {
+    position: fixed;
+    border: 1px solid #333; 
+    border-radius: 50%;
+    right: 5%;
+    top: 5% ;
+    color: #333;
+    font-size: 50px;
+    width: 43px;
+    height: 43px;
+    text-align: center;
+    padding: 0;
+    cursor: pointer;
+    font-weight: bold;
+    &:hover {
+      color: black;
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.7);
+      transition: all 200ms ease-out;
+    }
+  }
+
+  div:first-child {
+    top: 4%;
+    position: fixed;
+    left: 4%;
+    width: 92%;
+    height: 92%;
+    background-color: lightgrey;
+  }
+  p {
+      color: white;
+      text-align: center;
+      margin-top: 0.3%;
+      font-size: 16px;
+    }
 }
 

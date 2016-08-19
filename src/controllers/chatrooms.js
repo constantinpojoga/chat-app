@@ -53,6 +53,7 @@ ChatroomController.route('/:id')
     var msg = {
           author: req.body.author,
           message:  req.body.message,
+          type:     req.body.type || "text",
           time:     new Date()
         }
     Chatroom.findOneAndUpdate(
