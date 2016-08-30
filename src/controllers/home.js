@@ -42,7 +42,11 @@ HomeController.route('/login')
 
 HomeController.route('/register')
 .post(function(req, res, next) { 
-      bcrypt.hash(req.body.password, 10, function(err, hash) {
+  if (req.body.password !== re.body.passwordRepeat) {
+    res.render('login', {pageTitle: "Log in to continue | Sign in", 
+                           message: "Password fields doesn't match"});
+  } else {
+    bcrypt.hash(req.body.password, 10, function(err, hash) {
         // Save user inside here
         User.create({
           username:  req.body.username,
@@ -59,9 +63,16 @@ HomeController.route('/register')
           }
         });
       });
-  })
+    }   
+  });
 
-
+HomeController.route('/logout')
+ .get(function(req, res, next){
+    req.session.isLoggedIn  = false;
+    req.session.userId      = null;
+    req.session.username    = null;
+    res.redirect('/');
+ });
 
 
 HomeController.route('/?')
@@ -76,7 +87,6 @@ HomeController.route('/?')
                            message:   req.session.message ? req.session.message : 'Enter username and password'
       });
     }
-    
   });
 
 module.exports = HomeController;

@@ -29,6 +29,11 @@ ChatroomController.route('/private/:username')
     if (err) {
       console.log(err)
     } else {
+      console.log('-------------------------------------------')
+      console.log(chatrooms.filter(function(chatroom) {
+        return chatroom.users.indexOf(req.params.username) !== -1;
+      }))
+      console.log('-------------------------------------------')
       res.json(chatrooms.filter(function(chatroom) {
         return chatroom.users.indexOf(req.params.username) !== -1;
       }));

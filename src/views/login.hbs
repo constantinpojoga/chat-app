@@ -1,45 +1,47 @@
 
-  <div class="login-page authentication">
-    <div id="login-form">
-      <p class="error-message"> {{message}} </p>
-      <form action="/login" method="post">
-        <label class="form-block">
-         <p>Username: </p>
-          <input type="text" name="username" size="25" />
-        </label><br />
-        <label class="form-block">
-         <p>Password: </p>
-          <input type="password" name="password"  size="25" />
-        </label><br />
-        <button>Sign in</button><br />
-        <p>New User? <a class="homepage-login-btn" id="homepageRegisterBtn" href="/#">Register </a></p>
-      </form>
-    </div> 
+<section class="authentication">
+  <div class="container">
+    <div class="row">
+      <div class="login-register-form">
+        <div class="login-page">
+          <div id="login-form">
+            <p class="error-message"> {{message}} </p>
+            <form class="form-horizontal" action="/login" method="post">
+              <label class="control-label">Username:</label>
+              <input class="form-control" type="text" name="username" size="25" required/>
+              <label class="control-label">Password:</label>
+              <input class="form-control" type="password" name="password" size="25" required/>
+              <button class="btn btn-default">Login</button>
+            </form>
+            <p>New User? <a class="homepage-login-btn" id="homepageRegisterBtn" type="button">Register </a></p>
+          </div> 
+        </div>
+        
+        <div class="register-page">
+          <div id="register-form" >
+            <p class="error-message"> {{message}} </p>
+            <form class="form-horizontal" action="/register" method="post">
+              <label class="control-label">Pick a username:</label>
+              <input class="form-control" type="text" name="username" required/>
+              
+              <label class="control-label" for="register-password">Choose a password:</label>
+              <input class="form-control" id="register-password" type="password" name="password" required/>
+              
+              <label class="control-label">Repeat password:</label><br />
+              <input class="form-control" type="password" name="passwordRepeat" required/>
+              
+              <button class="btn btn-default">Sign up</button><br />
+              <p> Already registered? <a class="homepage-login-btn" id="homepageLoginBtn" href="#" type="button">Login</a></p> 
+            </form>
+          </div>  
+        </div>
+      </div>
+    </div>
   </div>
-    
-  <div class="register-page authentication">
-    <div id="register-form" >
-      <p class="error-message"> {{message}} </p>
-      <form action="/register" method="post">
-        <label class="form-block">
-         <p>Pick a username: </p>
-          <input type="text" name="username" size="25" />
-        </label><br />
-        <label class="form-block">
-          <p>Choose a password: </p>
-          <input type="password" name="password"  size="25" />
-        </label><br />
-         <label class="form-block">
-          <p>Choose a password: </p>
-          <input type="password" name="password"  size="25" />
-        </label><br />
-        <button>Sign up</button><br />
-        <p> Already registered? <a class="homepage-login-btn" id="homepageLoginBtn" href="/login">Login</a></p> 
-      </form>
-    </div>  
-  </div>
-    
+</section>
+  
+  
+<script>
+var username;
+</script> 
 
- 
-</main>
-<script src="/js/main.js"></script>

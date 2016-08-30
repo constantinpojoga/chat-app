@@ -1,89 +1,110 @@
+<section>
+  <div class="container-fluid">
+    <div class="row">
 
-  <div class="chatMenu">
-    <h1 class="chatLogo">sChat</h1>
-    <img class="menuButton" src="/img/nav-menu-icon.png">
+      <div class="col-sm-4 col-md-3">
+        <div class="chatMenu hidden-xs ">
+          <h2 class="chatUser">{{username}}<span class="logout push-right"><a href="/logout">Logout</a></span></h2>  
+          <h3>Chatrooms:</h3>
+          <ul id="channelList" class="channelList"> 
+          </ul>
+          <h3>Private: <button id="newPrivateChat">+</button></h3>
+          <ul id="privateChannelList" class="channelList"> 
+            <li>Alina</li>
+            <li>Bill</li>
+            <li>Paola</li>
+          </ul>
+        </div>
+      </div>
 
-      <h3>Chatrooms: <button>+</button></h3>
-      <ul id="channelList" class="channelList"> 
-      </ul>
-      <h3>Private: <button id="newPrivateChat">+</button></h3>
-      <p>User </p>
-      <p>Volodea</p>
-      <p>Paola</p>
-    </div>
-
-    <div class="chatMessageArea">
-        <ul class="pages">
-          <li class="chat page">
-            <div class="chatArea">
-              <div class="chat-members">
-
-                <ul id="online-chat-members">
-                </ul>
+      <div class="col-sm-8 col-md-9">
+        <div class="chatMessageArea">
+          <ul class="">
+            <li class="chat page">
+              <div class="chatArea">
+                <ul class="messages"></ul>
               </div>
-              <ul class="messages"></ul>
-            </div
-            <div class="input-wrapper">
-              <button class="attach-button" id="addSnippetMessageShow" type="button">&nbsp;</button>
-              <button class="attach-button" id="addImgMessageShow" type="button">&nbsp;</button>
-              <input class="inputMessage" placeholder="Type here..."/>
-            </div>  
-          </li>
-       </ul>
-    </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    
+      <div class="input-group input-wrapper">{{!--  --}}
+        <span class="input-group-btn">
+          <button id="addImgMessageShow" class="btn btn-default" type="button"><i class="glyphicon glyphicon-picture"></i></button>
+          <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-facetime-video"></i></button>
+          <button id="addSnippetMessageShow" class="btn btn-default" type="button"><i class="fa fa-code"></i></button>
+        </span>
+        <input type="text" class="form-control inputMessage" placeholder="Type here..." />
+      </div>
+   
+  
+      
+        {{!-- Hiden elements of the page! add New Private Chatroom--}}
 
-  {{!-- Hiden elements of the page! add New Private Chatroom--}}
-  {{!-- --------------------------------------------------- --}}
-  {{!-- add a new private chat form --}}
-  <div class="addPrivateChat" id="addPrivateChatWrapper">
-    <div id="closeAddPrivateChatBtn">X</div>
-    <div>
-      <form>
-        <h3>Username:</h3>
-        <input id="addPrivateChatUser" type="text" name="user" placeholder="Username here" size="80" /><br />
-        <h3>Message:</h3>
-        <input id="addPrivateChatMessage" type="text" name="message" placeholder="Message here" size="80" ><br />
-        <button id="addPrivateChatBtn" type="button">Submit</button>
-      </form>
+        {{!-- --------------------------------------------------- --}}
+        {{!-- add a new private chat form --}}
+        <div class="addPrivateChat" id="addPrivateChatWrapper">
+          <div id="closeAddPrivateChatBtn"><span>&#x274C;</span></div>
+          <div class="col-sm-push2 col-sm-8 col-md-push-3 col-md-6">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <h3>Username:</h3>
+                <input class="form-control" id="addPrivateChatUser" type="text" name="user" placeholder="Username here" size="80" /><br />
+                <h3>Message:</h3>
+                <input class="form-control" id="addPrivateChatMessage" type="text" name="message" placeholder="Message here" size="80" ><br />
+                <button class="btn btn-primary" id="addPrivateChatBtn" type="button">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {{!-- --------------------------------------------------- --}}
+        {{!-- add image to chat form --}}
+        <div class="addImgMessage" id="addImgMessage">
+          <div id="closeAddImgMessageBtn"><span>&#x274C;</span></div>
+          <div>
+            <form>
+              <h3>Image url: </h3>
+              <input id="addImgMessageUrl" type="text" name="url" placeholder="URL here" size="80" />
+              <button id="addImgMessageBtn" class="btn btn-default" type="button">Submit</button>
+            </form>
+          </div>
+        </div>
+
+        {{!-- add image to chat form --}}
+        <div class="addSnippetMessage" id="addSnippetMessage">
+          <div id="closeAddSnippetMessageBtn"><span>&#x274C;</span></div>
+          <div>
+            <form>
+              <h3>Image url: </h3>
+              <textarea autofocus  spellcheck="false" id="addSnippetMessageContent" name="snippet" placeholder="Paste snippet here" ></textarea><br />
+              <button id="addSnippetMessageBtn" class="btn btn-default" type="button">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {{!-- Hiden div for image preview --}}
+      <div class="imagePreviewDiv">
+        <div>&nbsp;</div>
+        <div id="closeImagePreview"><span>&#x274C;</span></div>
+        <p>To close the Foto press "X" on upper-left corner </p>
+      </div>
+
+
+
+
     </div>
   </div>
+</section>
+  
 
-  {{!-- --------------------------------------------------- --}}
-  {{!-- add image to chat form --}}
-  <div class="addImgMessage" id="addImgMessage">
-    <div id="closeAddImgMessageBtn">X</div>
-    <div>
-      <form>
-        <h3>Snippet: </h3>
-        <input id="addImgMessageUrl" type="text" name="url" placeholder="URL here" size="80" />
-        <button id="addImgMessageBtn" type="button">Submit</button>
-      </form>
-    </div>
-  </div>
-
-  {{!-- add image to chat form --}}
-  <div class="addSnippetMessage" id="addSnippetMessage">
-    <div id="closeAddSnippetMessageBtn">X</div>
-    <div>
-      <form>
-        <h3>Image url: </h3>
-        <textarea autofocus  spellcheck="false" id="addSnippetMessageContent" name="snippet" placeholder="Paste snippet here" ></textarea><br />
-        <button id="addSnippetMessageBtn" type="button">Submit</button>
-      </form>
-    </div>
-  </div>
-
-  {{!-- Hiden div for image preview --}}
-  <div class="imagePreviewDiv">
-    <div>&nbsp;</div>
-    <div id="closeImagePreview"><h1>X</h1></div>
-    <p>To close the Foto press "X" on upper-left corner </p>
-  </div>
+  
 
 <script>
 var username = '{{username}}';
 </script> 
-<script src="/js/main.js"></script>
+
 
 
 

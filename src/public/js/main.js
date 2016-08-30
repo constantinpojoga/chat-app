@@ -37,7 +37,9 @@ $(function() {
   var readyToType    = true;
   
   // var channels = ['Lobby', 'JavaScript', 'Node', 'WDI5'];
-  setUsername();
+  if(username) {
+    setUsername();
+  }
   
   // Displays all online user for active channel
   // now disabled!!!
@@ -457,7 +459,6 @@ $(function() {
           getChannelMessages(i); 
           });
       });
-      
       $('#channelList li').first().css("font-weight", "bold");
       getChannelMessages(0);
     },
@@ -465,6 +466,72 @@ $(function() {
       console.log(err);
     }
   });
+  
+  // Listing all global channels 
+  // on click, emit 'change room' and change css style only for selected <li>
+  $.ajax({
+    url: '/chatrooms/private' + username,
+    type: 'GET',
+    dataType: "json",
+    success: function(data) {
+      console.log("I found: " + data);
+      // console.log(typeof channels);
+      // chatrooms = channels;
+
+      // channels.forEach(function(channel, i) {
+      //   $('#channelList').append('<li id="channel' + channel.name + '">' + channel.name + '</li>');  
+      //   $('#channel' + channel.name).click(function() {
+      //     $('#channelList li').css("font-weight", "normal");
+      //     $(this).css("font-weight", "bold");
+      //     socket.emit('change room', i);  
+      //     activeChannel = i;
+      //     getChannelMessages(i); 
+      //     });
+      // });
+      // $('#channelList li').first().css("font-weight", "bold");
+      // getChannelMessages(0);
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
+
+  
+  var privateArr =  [
+                      {
+                        "_id": "57b616bbe75643273a37a8ff",
+                        "name": "admin user",
+                        "public": false,
+                        "__v": 0,
+                        "messages": [
+                          {
+                            "author": "admin",
+                            "message": "Hi user, let's be friends",
+                            "time": "Thu Aug 18 2016 15:12:43 GMT-0500 (CDT)"
+                          }
+                        ],
+                        "users": [
+                          "admin",
+                          "user"
+                        ]
+                      }
+                    ];
+
+    privateArr.forEach(function(channel, i) {
+      // chatrooms.push(channel);
+        $('#privateChannelList').append('<li id="channel' + channel.name + '">' + channel.name.split(' ').filter(function(val) {  return val !== username }) + '</li>');  
+        $('#channel' + channel.name).click(function() {
+          $('#channelList li').css("font-weight", "normal");
+          $(this).css("font-weight", "bold");
+          socket.emit('change room', i + 4);  
+          activeChannel = i + 4;
+          getChannelMessages(i); 
+          });
+      });
+
+
+
+
 
 
   // ----------------------------------------------------------------
@@ -472,18 +539,17 @@ $(function() {
 
   // Show login page before chat
   // On "Login link" click, switch to register
-  $('#homepageLoginBtn').click(function(event) {
-    event.preventDefault();
+  $('#homepageLoginBtn').click(function(e) {
+    e.preventDefault();
     $('.login-page').css('display','block');
     $('.register-page').css('display','none');
   });
 
   // On "Register link" click, switch to Login
-  $('#homepageRegisterBtn').click(function(event) {
-    event.preventDefault();
+  $('#homepageRegisterBtn').click(function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
     console.log('register pressed')
-    
-    
     $('.register-page').css('display','block');
     $('.login-page').css('display','none');
   });

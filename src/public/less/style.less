@@ -2,27 +2,43 @@
  * Main Stylesheet
  */
 
-::selection { background: @orange; color: @white; }
-::moz-selection { background: @orange; color: @white; }
+// ::selection { background: #777; color: @white; }
+// ::moz-selection { background: #777; color: @white; }
 
 @import 'modules/colors';     // Global color scheme
-@import 'modules/mixins';     // Mixins
+// @import 'modules/mixins';     // Mixins
 // @import 'modules/grid';       // Baseline grid
-@import 'modules/flex-grid';  // Flexbox grid
-@import 'modules/mobile';     // Mixins
+// @import 'modules/flex-grid';  // Flexbox grid
+@import 'modules/mobile';     // Mobile
 @import 'modules/type';       // Typography
 
+.clearfix() {
+  *zoom:1;
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
  * {
-      color: #402E10;
-      box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+          box-sizing: border-box;
     }
 
 /* Fix user-agent */
-
 html {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
+}
 
+section {
+  overflow: hidden;
 }
 
 html, input {
@@ -51,28 +67,22 @@ ul {
 
 .chatMenu {
   padding: 30px;
-  width: 25%;
-  height: 100%;
+  height: 100vh;
+  margin-left: -15px;
+  margin-right: -15px;
   border: 1px solid lightblue;
-  float: left;
   border-right: none;
   font-size: 20px;
-  h1 {
-    display: inline-block;
-    float: left;
+  h2 {
     color: lightblue;
-  }
-  .menuButton {
-    padding: 3px;
-    border: 1px solid lightblue;
-    display: block;
-    height: 30px;
-    float: right;
-  }
-  .menuButton:hover {
-      padding: 5px;
+    span a{
+      padding-top: 11px;
+      text-decoration: none;
+      float: right;
+      color: darkred;
+      font-size: 18px;
     }
-
+  }
   h3  {
     clear: both;
     color: #555;
@@ -98,50 +108,40 @@ ul {
     padding-left: 0;
     cursor: pointer;
   }
-  
 }
 
 .livestamp {
-  color:  #ffe6cc;
+  color:  brown;
   margin-left: 20px;
   font-weight: normal;
   font-style: italic;
 }
 
-.chatMessageArea {
-  float: left;
-  width: 75%;
-  height: 100%;
-  border: 1px solid lightblue;;
+.chatMessageArea { 
+  height: calc(~"100vh" - 36px);
+  border: 1px solid lightblue;
+  margin-left: -15px;
+  margin-right: -15px;
 }
 
 /* Pages */
-
 .pages {
   height: 100%;
   margin: 0;
   padding: 0;
   width: 100%;
-
 }
 
 .page {
   height: 100%;
   position: absolute;
-  width: 74.8%;
-
 }
 
-/* Login Page */
-
-.login.page {
-  background-color: #000;
-}
 
 /* Chat page */
-
 .chat.page {
   display: block;
+  width: 100%;
   .chat-members {
     ul {
       li {
@@ -157,23 +157,21 @@ ul {
 }
 
 /* Font */
-
 .messages {
   font-size: 150%;
 }
 
 .log {
-  color: gray;
-  font-size: 70%;
+  color: green;
+  font-size: 90%;
   margin: 5px;
   text-align: center;
 }
 
 /* Messages */
-
 .chatArea {
-  height: 100%;
-  padding-bottom: 60px;
+  height: 100vh;
+  padding-bottom: 45px;
 }
 
 .messages {
@@ -184,7 +182,7 @@ ul {
 }
 
 .message.typing .messageBody {
-  color: gray;
+  color: @white;
 }
 
 .username {
@@ -194,61 +192,6 @@ ul {
   text-align: right;
 }
 
-/* Input */
-
-.inputMessage {
-  font-size: 150%;
-  border: 10px solid lightblue;
-  bottom: 0;
-  height: 60px;
-
-  outline: none;
-  padding-left: 10px;
-  position: absolute;
-  right: 0;
-  width: 90%;
-  display: inline;
-  float: left;
-}
-
-.attach-button {
-  font-size: 150%;
-  border: 10px solid lightblue;
-  background: url(/img/image-btn.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  bottom: 0;
-  height: 60px;
-  left: 0;
-  outline: none;
-  padding-left: 10px;
-  position: absolute;
-  width: 5%;
-  border-right: 0;
-  display: inline;
-  float: left;
-  
-  &:nth-child(2) {
-    background: url(/img/snippet.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    left: 5%;
-  }
-  
-}
-
-.login-page {
-  display: block;
-}
-
-.register-page {
-  display: none;
-}
-
-.form-wrapper {}
-
 .addPrivateChat{
   display: none;
   position: fixed;
@@ -257,23 +200,15 @@ ul {
   top: 0;
   width: 100%;
   height: 100%;
-  div:first-child {
-    position: fixed;
-    right: 50px;
-    top: 50px;
-    color: #777;
-    font-size: 55px;
-    border-radius: 50%;
-    border: 1px solid #777;
-    width: 80px;
-    height: 80px;
-    padding-left: 22px;
-    padding-right: 0;
+  span {
     cursor: pointer;
+    position: fixed;
+    right: 5%;
+    top: 5% ;
+    font-size: 60px;
     &:hover {
-      color: #999;
-      background-color: #333;
-      border: 1px solid #999;
+      font-weight: bold;
+      transition: all 200ms ease-out;
     }
   }
   div:nth-child(2) {
@@ -295,38 +230,6 @@ ul {
   }
 }
 
-.authentication {
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.85);
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  div {
-    position: fixed;
-    width: 30%;
-    top: 30%;
-    left: 35%;
-  }
-  form {
-    color: white;
-    input {
-      margin-bottom: 10px;
-    }
-  }
-  .error-message {
-    font-weight: 14px;
-    color: #F12B24;
-  }
-  p {
-    color: #ddd;
-    font-size: 18px;
-  }
-  button {
-    color: #111;
-    margin-bottom: 10px;
-  }
-}
 
 .addImgMessage {
   display: none;
@@ -336,23 +239,15 @@ ul {
   top: 0;
   width: 100%;
   height: 100%;
-  div:first-child {
+  span {
+    cursor: pointer;
     position: fixed;
-    right: 50px;
-    top: 50px;
-    color: #777;
-    font-size: 55px;
-    border-radius: 50%;
-    border: 1px solid #777;
-    width: 80px;
-    height: 80px;
-    padding-left: 22px;
-    padding-right: 0;
+    right: 5%;
+    top: 5% ;
+    font-size: 60px;
     &:hover {
-      color: #999;
-      background-color: #333;
-      border: 1px solid #999;
-      cursor: pointer;
+      font-weight: bold;
+      transition: all 200ms ease-out;
     }
   }
   div:nth-child(2) {
@@ -385,23 +280,15 @@ ul {
   top: 0;
   width: 100%;
   height: 100%;
-  div:first-child {
-    position: fixed;
-    right: 50px;
-    top: 50px;
-    color: #777;
-    font-size: 55px;
-    border-radius: 50%;
-    border: 1px solid #777;
-    width: 80px;
-    height: 80px;
-    padding-left: 22px;
-    padding-right: 0;
+ span {
     cursor: pointer;
+    position: fixed;
+    right: 5%;
+    top: 5% ;
+    font-size: 60px;
     &:hover {
-      color: #999;
-      background-color: #333;
-      border: 1px solid #999;
+      font-weight: bold;
+      transition: all 200ms ease-out;
     }
   }
   div:nth-child(2) {
@@ -426,7 +313,7 @@ ul {
 
 .imageMessageBody {
   cursor: pointer;
-  max-width: 400px;
+  max-width: 80%;
   max-height: 400px;
   margin: 10px auto;
 }
@@ -435,15 +322,15 @@ ul {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-right: 60px;
-  margin-right: 100px;
+  // margin-right: 100px;
+  box-shadow: inset 0 0 1px 2px rgba(0, 0, 0, 0.5);
   li {
     color: #111;
-    font-family: Verdana;
-    margin-top: 5px;
+    font-family: monospace;
+    margin-top: 4px;
     span {
       padding-left: 10px;
       border-left: 1px solid grey;
-    
     }
   }
   font-size: 16px;
@@ -458,28 +345,19 @@ ul {
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
-  div:nth-child(2) {
+  height: 100%;  
+  z-index: 200;
+  span {
+    cursor: pointer;
     position: fixed;
-    border: 1px solid #333; 
-    border-radius: 50%;
     right: 5%;
     top: 5% ;
-    color: #333;
-    font-size: 50px;
-    width: 43px;
-    height: 43px;
-    text-align: center;
-    padding: 0;
-    cursor: pointer;
-    font-weight: bold;
+    font-size: 60px;
     &:hover {
-      color: black;
-      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.7);
+      font-weight: bold;
       transition: all 200ms ease-out;
     }
   }
-
   div:first-child {
     top: 4%;
     position: fixed;
@@ -496,3 +374,58 @@ ul {
     }
 }
 
+.input-wrapper {
+  position: fixed;
+  z-index: 100;
+  // bottom: 40px;
+  // border: 3px solid lightblue;
+  font-size: 40px;
+  margin-left: -15px;
+  margin-right: -15px;
+  input {
+    border-radius: 0;
+  }
+}
+
+/* Fix right border radius on Bootstrap-select buttons */
+.input-group-btn:first-child:not(:last-child)  > button {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-radius: 0;
+  color: red; /* Delete this line */
+}
+
+// Login.hbs
+.login-page {
+  display: block;
+}
+
+.register-page {
+  display: none;
+}
+
+
+.login-register-form {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30vh;
+  width: 300px; 
+}
+
+.authentication {
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: @white;
+  font-size: 16px;
+  p {
+    margin-top: 5px;
+    color: @white;
+  }
+  .error-message {
+    font-weight: 14px;
+    color: #F12B24;
+  }
+  button {
+    margin-top: 10px;
+  }
+}
