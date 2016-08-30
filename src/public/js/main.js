@@ -116,6 +116,7 @@ $(function() {
   // Append the message, snippet or image to the chat
   function addChatMessage(data, options) {
     // Don't fade the message in if there is an 'X was typing'
+    var username = data.username || username;
     var $typingMessages = getTypingMessages(data);
     options = options || {};
     if ($typingMessages.length !== 0) {
@@ -160,7 +161,6 @@ $(function() {
       });
 
     } else if (data.type === 'snippet') {
-
       // Building snippet <div>
       var $messageBodyDiv = '<li><ol class="snippetMessageBody">';
       var snippet = data.message.split('\n').map(function(val) { 
@@ -265,7 +265,8 @@ $(function() {
 
   // Gets the 'X is typing' messages of a user
   function getTypingMessages(data) {
-    return $('.typing.message').filter(function (i) {
+    return $('.typing.message')
+    .filter(function (i) {
       return $(this).data('username') === data.username;
     });
   }
@@ -299,7 +300,7 @@ $(function() {
 
         $messageBodyDiv = '<li><img class="imageMessageBody" id="' + imageId + '" src="' + msg.message + '"></li>'
         
-         var $messageDiv = $('<li class="message"/>')
+        var $messageDiv = $('<li class="message"/>')
           .data('username', msg.author)
           .append($usernameDiv, $messageBodyDiv);
         // Append the created DIV to the DOM
@@ -325,15 +326,12 @@ $(function() {
                     .replace(/\//g, '&bsol;')
                     .replace(/\n/g, '');
         });
-        console.log( snippet);
-
+        // console.log( snippet);
         snippet.forEach(function(val) {
           $messageBodyDiv += '<li><span>' + val + '<span></li>';
         });
         $messageBodyDiv += '</ol></li><br />';
         console.log($messageBodyDiv);
-
-
 
          var $messageDiv = $('<li class="message"/>')
           .data('username', msg.author)
@@ -344,14 +342,12 @@ $(function() {
         // Building message <li>
         $messageBodyDiv = $('<p class="messageBody">')
           .text(msg.message);
-
          var $messageDiv = $('<li class="message"/>')
           .data('username', msg.author)
           .append($usernameDiv, $messageBodyDiv);
         // Append the created DIV to the DOM
         addMessageElement($messageDiv);
       }
-     
     })
   }
 
@@ -377,7 +373,6 @@ $(function() {
     updateTyping();
   });
   
-
   // Click events
   // Focus input when clicking anywhere on login page
   $loginPage.click(function () {
@@ -410,20 +405,20 @@ $(function() {
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
-    console.log(data)
+    // console.log(data)
     addChatMessage(data);
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
-    console.log('user joined, data');
+    // console.log('user joined, data');
     log(data.username + ' joined');
     addParticipantsMessage(data);
   });
 
   // Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', function (data) {
-    console.log('user joined, data');
+    // console.log('user joined, data');
     log(data.username + ' left');
     addParticipantsMessage(data);
     removeChatTyping(data);
@@ -431,11 +426,13 @@ $(function() {
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', function (data) {
+    console.log(data.username, " is typing" );
     addChatTyping(data);
   });
 
   // Whenever the server emits 'stop typing', kill the typing message
   socket.on('stop typing', function (data) {
+    console.log(data.username, " is typing" );
     removeChatTyping(data);
   });
 

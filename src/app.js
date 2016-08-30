@@ -100,12 +100,13 @@ io.on('connection', function(socket) {
   
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function(data) {
-    console.log('new message: ' + data);
+    console.log('new message: ' , data.message, data.type);
     var timeNow = new Date();
     // we tell the client to execute 'new message'
     socket.to(chatrooms[currentRoom].name).broadcast.emit('new message', {
       username: socket.username,
-      message:  data,
+      message:  data.message,
+      type:     data.type,
       time:     timeNow
     });
   });
@@ -145,7 +146,7 @@ io.on('connection', function(socket) {
 
   // when the client emits 'stop typing', we broadcast it to others
   socket.on('stop typing', function() {
-    // console.log(socket.username + ' stopped typing')
+    console.log(socket.username + ' stopped typing')
     socket.to(chatrooms[currentRoom].name).broadcast.emit('stop typing', {
       username: socket.username
     });
@@ -153,7 +154,7 @@ io.on('connection', function(socket) {
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function() {
-      console.log(chatrooms);
+      // console.log(chatrooms);
       chatrooms[currentRoom].activeUsers.splice(chatrooms[currentRoom].activeUsers.indexOf(socket.username), 1);
       console.log(socket.username + ' disconected, remain ' + numUsers +' users')
       console.log('remaining active users: ' + chatrooms[currentRoom].activeUsers);
