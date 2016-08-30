@@ -42,7 +42,7 @@ HomeController.route('/login')
 
 HomeController.route('/register')
 .post(function(req, res, next) { 
-  if (req.body.password !== re.body.passwordRepeat) {
+  if (req.body.password !== req.body.passwordRepeat) {
     res.render('login', {pageTitle: "Log in to continue | Sign in", 
                            message: "Password fields doesn't match"});
   } else {
@@ -63,7 +63,7 @@ HomeController.route('/register')
           }
         });
       });
-    }   
+    }   //password match chech, now dissabled
   });
 
 HomeController.route('/logout')
