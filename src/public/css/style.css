@@ -489,7 +489,7 @@ ul {
   left: 4%;
   width: 92%;
   height: 92%;
-  background-color: lightgrey;
+  background-color: rgba(0, 0, 0, 0.85);
 }
 .imagePreviewDiv p {
   color: white;

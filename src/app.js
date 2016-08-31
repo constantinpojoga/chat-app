@@ -62,12 +62,10 @@ io.on('connection', function(socket) {
                   }
                 ];;
 
-
-
   var addedUser = false;
   var currentRoom = 0;
   socket.join(chatrooms[currentRoom].name);
-  console.log('Users connected to ' + chatrooms[currentRoom].name + ": "+ chatrooms[currentRoom].activeUsers);
+  // console.log('Users connected to ' + chatrooms[currentRoom].name + ": "+ chatrooms[currentRoom].activeUsers);
   // console.log(chatrooms);
 
   // Changing room
@@ -100,7 +98,7 @@ io.on('connection', function(socket) {
   
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function(data) {
-    console.log('new message: ' , data.message, data.type);
+    // console.log('new message: ' , data.message, data.type);
     var timeNow = new Date();
     // we tell the client to execute 'new message'
     socket.to(chatrooms[currentRoom].name).broadcast.emit('new message', {
@@ -113,12 +111,12 @@ io.on('connection', function(socket) {
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function(username) {
-    console.log('add new user: ' + username)
+    // console.log('add new user: ' + username)
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
     chatrooms[currentRoom].activeUsers.push(socket.username);
-    console.log('active users: ' + chatrooms[currentRoom].activeUsers);
+    // console.log('active users: ' + chatrooms[currentRoom].activeUsers);
     addedUser = true;
     socket.emit('login', {
       numUsers:    numUsers,
@@ -146,7 +144,7 @@ io.on('connection', function(socket) {
 
   // when the client emits 'stop typing', we broadcast it to others
   socket.on('stop typing', function() {
-    console.log(socket.username + ' stopped typing')
+    // console.log(socket.username + ' stopped typing')
     socket.to(chatrooms[currentRoom].name).broadcast.emit('stop typing', {
       username: socket.username
     });
@@ -156,8 +154,8 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
       // console.log(chatrooms);
       chatrooms[currentRoom].activeUsers.splice(chatrooms[currentRoom].activeUsers.indexOf(socket.username), 1);
-      console.log(socket.username + ' disconected, remain ' + numUsers +' users')
-      console.log('remaining active users: ' + chatrooms[currentRoom].activeUsers);
+      // console.log(socket.username + ' disconected, remain ' + numUsers +' users')
+      // console.log('remaining active users: ' + chatrooms[currentRoom].activeUsers);
       // echo globally that this client has left
       socket.to(chatrooms[currentRoom].name).broadcast.emit('user left', {
         username:    socket.username,

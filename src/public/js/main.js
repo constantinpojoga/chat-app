@@ -311,7 +311,8 @@ $(function() {
           $('.imagePreviewDiv div:first-child')
             .css('background-image', 'url(' + msg.message + ')')
             .css('background-repeat', 'no-repeat')
-            .css('background-size', 'cover');
+            .css('background-size', 'contain')
+            .css('background-position', 'center');
           $('.imagePreviewDiv').show();
         });
 
@@ -389,7 +390,7 @@ $(function() {
   // Whenever the server emits 'login', log the login message
   socket.on('login', function (data) {
     connected = true;
-    console.log('login ' + data);
+    // console.log('login ' + data);
     // Display the welcome message
     var message = "Welcome to sChat";
     log(message, {
@@ -442,11 +443,12 @@ $(function() {
     url: '/chatrooms/public',
     type : 'GET',
     success: function(channels) {
-      console.log(channels);
+      console.log("channel list", channels);
       // console.log(typeof channels);
       chatrooms = channels;
 
       channels.forEach(function(channel, i) {
+
         $('#channelList').append('<li id="channel' + channel.name + '">' + channel.name + '</li>');  
         $('#channel' + channel.name).click(function() {
           $('#channelList li').css("font-weight", "normal");
